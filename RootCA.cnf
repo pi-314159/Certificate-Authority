@@ -1,0 +1,125 @@
+
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = /root/CA
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+RANDFILE          = $dir/private/.rand
+
+# The root key and root certificate.
+private_key       = $dir/private/CA.key
+certificate       = $dir/certs/CA.crt
+
+# For certificate revocation lists.
+crlnumber         = $dir/crlnumber
+crl               = $dir/crl/CA.crl
+crl_extensions    = crl_ext
+default_crl_days  = 365
+
+default_md        = sha384
+
+name_opt          = ca_default
+cert_opt          = ca_default
+default_days      = 366
+preserve          = no
+policy            = policy_strict
+
+[ policy_strict ]
+countryName             = match
+stateOrProvinceName     = match
+localityName            = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ policy_loose ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+default_md          = sha384
+
+x509_extensions     = v3_ca
+
+[ req_distinguished_name ]
+countryName			= Country Name (2 letter code)
+countryName_default		= KY
+countryName_min			= 2
+countryName_max			= 2
+stateOrProvinceName		= State or Province Name (full name)
+stateOrProvinceName_default	= 
+localityName			= Locality Name (eg, city)
+localityName_default    = 
+0.organizationName		= Organization Name (eg, company)
+0.organizationName_default	= 
+# we can do this but it is not needed normally :-)
+#1.organizationName		= Second Organization Name (eg, company)
+#1.organizationName_default	= 
+organizationalUnitName		= Organizational Unit Name (eg, section)
+organizationalUnitName_default	=
+commonName			= Common Name (eg, YOUR name)
+commonName_max			= 64
+#emailAddress			= Email Address
+#emailAddress_max		= 40
+
+[ req_attributes ]
+challengePassword		= A challenge password
+challengePassword_min	= 4
+challengePassword_max	= 20
+unstructuredName		= An optional company name
+
+[ v3_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
+basicConstraints = critical, CA:true
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+certificatePolicies = @PICATrust
+
+[ PICATrust ]
+policyIdentifier = 2.16.840.1.114028.10.1.2
+CPS.1 = https://example.com
+
+[ v3_intermediate_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+authorityInfoAccess = @OCSP_Info
+certificatePolicies = @PIIntmdTrust,2.5.29.32.0
+crlDistributionPoints = @crl_sec
+
+[ OCSP_Info ]
+caIssuers;URI.0 = http://example.com/1.crt
+OCSP;URI.0 = http://ocsp2.example.com
+
+[ PIIntmdTrust ]
+policyIdentifier = 2.16.840.1.114028.10.1.2
+CPS.1 = https://example.com
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid:always
+
+[ crl_sec ]
+URI.0 = http://example.com/1.crl
+
+[ ocsp ]
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, OCSPSigning

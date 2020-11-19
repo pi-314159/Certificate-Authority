@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Hex Length Calculator</title>
+  <meta name="description" content="This Calculator Calculates Length of a string.">
+  <meta name="keywords" content="String Length Calculator, String Length">
+  <meta name="author" content="github.com/Pi-314159">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/02/03/kGn8b9.png">
+  <link href="https://picloud.xyz/Fonts/?CourtM,400" rel="stylesheet">
+</head>
+  
+<body onload="strLenCalc('first')">
+<p align="center" style="font-size: 1.2em;">String Length: <br><span style="font-size: 2.5em; font-family: CourtM; font-weight: 400;" id="sLength">0</span></p>
+<p align="center" style="font-size: 1.2em;"><a onclick="strLenCalc()" href="javascript:void(0);">Another One!</a></p>
+<script>
+function strLenCalc(freq) {
+  if (freq == "first") {
+    console.log("Common Hex String Byte Length and Corresponding ASN.1: \
+    \n240: 0481F0\
+    \n241: 0481F1\
+    \n242: 0481F2\
+    \n243: 0481F3\
+    \n244: 0481F4\
+    \n361: 04820169\
+    \n362: 0482016A\
+    \n363: 0482016B\
+    \n481: 048201E1\
+    \n482: 048201E2\
+    \n841: 04820349\
+    \n843: 0482034B");
+  }
+  var hexS = prompt("Please enter the string: ");
+  var hl_temp = "Processing…";
+  document.getElementById("sLength").innerHTML = hl_temp;
+  if (hexS != null && hexS != "") {
+  	var hl = (hexS.length) / 2;
+  } else {
+	var hl = 0;
+  }
+  if (Number.isInteger(hl) && hl > 0) {
+    console.log("Byte Length of a Hex String: " + hl);
+  }
+  hl = hl * 2
+  document.getElementById("sLength").innerHTML = hl;
+}
+</script>
+</body>
+
+<!-- https://pagescdn.17ping.com/HTML/strLen.html -->
+</html>
